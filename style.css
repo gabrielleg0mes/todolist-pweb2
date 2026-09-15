@@ -53,60 +53,6 @@ body {
   padding: 40px 16px;
 }
 
-.auth-card {
-  background: white;
-  border-radius: 16px;
-  padding: 32px 28px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 4px 24px rgba(112, 99, 240, 0.08);
-}
-
-.auth-card h2 {
-  color: var(--primary);
-  font-weight: 600;
-  font-size: 26px;
-  margin-bottom: 6px;
-}
-
-.auth-subtitle {
-  color: var(--gray-2);
-  font-size: 14px;
-  margin-bottom: 24px;
-}
-
-.field {
-  margin-bottom: 16px;
-}
-
-.field label {
-  display: block;
-  font-size: 13px;
-  color: var(--gray-2);
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-.field input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid var(--primary-light);
-  background: var(--primary-super-light);
-  border-radius: 8px;
-  font-size: 14px;
-  color: var(--gray-1);
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.field input:focus {
-  border-color: var(--primary);
-}
-
-.field input::placeholder {
-  color: #A9A3F5;
-}
-
 .btn-primary {
   width: 100%;
   background: var(--primary);
@@ -122,30 +68,6 @@ body {
 
 .btn-primary:hover {
   opacity: 0.9;
-}
-
-.auth-error {
-  color: var(--red);
-  font-size: 13px;
-  min-height: 18px;
-  margin-bottom: 8px;
-}
-
-.auth-toggle {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 13px;
-  color: var(--gray-2);
-}
-
-.auth-toggle button {
-  background: none;
-  border: none;
-  color: var(--primary);
-  font-weight: 600;
-  cursor: pointer;
-  margin-left: 4px;
-  font-size: 13px;
 }
 
 .app-card {
@@ -325,18 +247,6 @@ body {
   margin-bottom: 8px;
 }
 
-.logout-btn {
-  display: block;
-  margin: 16px auto 0;
-  background: none;
-  border: none;
-  color: var(--gray-2);
-  font-size: 13px;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
 @media (max-width: 480px) {
   .app-card { padding: 18px; }
-  .auth-card { padding: 24px 20px; }
 }
