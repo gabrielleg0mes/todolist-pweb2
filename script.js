@@ -1,150 +1,20 @@
-var isRegisterMode = false;
-
-var authScreen = document.getElementById("auth-screen");
-var appScreen = document.getElementById("app-screen");
-var authForm = document.getElementById("auth-form");
-var authTitle = document.getElementById("auth-title");
-var authSubtitle = document.getElementById("auth-subtitle");
-var authSubmit = document.getElementById("auth-submit");
-var authError = document.getElementById("auth-error");
-var nameField = document.getElementById("name-field");
-var nameInput = document.getElementById("name");
-var emailInput = document.getElementById("email");
-var passwordInput = document.getElementById("password");
-var toggleBtn = document.getElementById("toggle-btn");
-var toggleText = document.getElementById("toggle-text");
-var userNameEl = document.getElementById("user-name");
 var taskInput = document.getElementById("task-input");
 var addBtn = document.getElementById("add-btn");
 var taskList = document.getElementById("task-list");
 var emptyState = document.getElementById("empty-state");
 var progressCount = document.getElementById("progress-count");
-var logoutBtn = document.getElementById("logout-btn");
 
-function getUsers() {
-  var data = localStorage.getItem("todolist_users");
+function getTasks() {
+  var data = localStorage.getItem("todolist_tasks");
   if (data == null) {
     return [];
   }
   return JSON.parse(data);
 }
 
-function saveUsers(users) {
-  localStorage.setItem("todolist_users", JSON.stringify(users));
+function saveTasks(tasks) {
+  localStorage.setItem("todolist_tasks", JSON.stringify(tasks));
 }
-
-function getTasks(email) {
-  var data = localStorage.getItem("todolist_tasks_" + email);
-  if (data == null) {
-    return [];
-  }
-  return JSON.parse(data);
-}
-
-function saveTasks(email, tasks) {
-  localStorage.setItem("todolist_tasks_" + email, JSON.stringify(tasks));
-}
-
-function achaUsuarioPorEmail(users, email) {
-  for (var i = 0; i < users.length; i++) {
-    if (users[i].email == email) {
-      return users[i];
-    }
-  }
-  return null;
-}
-
-function alternarModo() {
-  isRegisterMode = !isRegisterMode;
-  authError.textContent = "";
-  authForm.reset();
-
-  if (isRegisterMode == true) {
-    authTitle.textContent = "Criar conta";
-    authSubtitle.textContent = "Cadastre-se para começar a organizar suas tarefas";
-    nameField.style.display = "block";
-    nameInput.required = true;
-    authSubmit.textContent = "Criar conta";
-    toggleText.textContent = "Já tem conta?";
-    toggleBtn.textContent = "Entrar";
-  } else {
-    authTitle.textContent = "Entrar";
-    authSubtitle.textContent = "Acesse sua conta para ver suas tarefas";
-    nameField.style.display = "none";
-    nameInput.required = false;
-    authSubmit.textContent = "Entrar";
-    toggleText.textContent = "Não tem conta?";
-    toggleBtn.textContent = "Crie sua conta";
-  }
-}
-
-toggleBtn.addEventListener("click", alternarModo);
-
-function enviarFormulario(e) {
-  e.preventDefault();
-  authError.textContent = "";
-
-  var email = emailInput.value.trim().toLowerCase();
-  var password = passwordInput.value;
-  var users = getUsers();
-
-  if (isRegisterMode == true) {
-    var name = nameInput.value.trim();
-    var jaExiste = achaUsuarioPorEmail(users, email);
-
-    if (jaExiste != null) {
-      authError.textContent = "Já existe uma conta com esse e-mail.";
-      return;
-    }
-
-    var novoUsuario = {};
-    novoUsuario.name = name;
-    novoUsuario.email = email;
-    novoUsuario.password = password;
-
-    users.push(novoUsuario);
-    saveUsers(users);
-    localStorage.setItem("todolist_session", email);
-    entrarNoApp(name, email);
-  } else {
-    var user = achaUsuarioPorEmail(users, email);
-
-    if (user == null || user.password != password) {
-      authError.textContent = "E-mail ou senha incorretos.";
-      return;
-    }
-
-    localStorage.setItem("todolist_session", email);
-    entrarNoApp(user.name, email);
-  }
-}
-
-authForm.addEventListener("submit", enviarFormulario);
-
-function entrarNoApp(name, email) {
-  authScreen.style.display = "none";
-  appScreen.style.display = "flex";
-  appScreen.style.flexDirection = "column";
-  appScreen.style.alignItems = "center";
-
-  if (name) {
-    userNameEl.textContent = name;
-  } else {
-    userNameEl.textContent = email;
-  }
-
-  mostrarTarefas(email);
-}
-
-function sair() {
-  localStorage.removeItem("todolist_session");
-  appScreen.style.display = "none";
-  authScreen.style.display = "flex";
-  isRegisterMode = false;
-  authForm.reset();
-}
-
-logoutBtn.addEventListener("click", sair);
 
 function formatarData(d) {
   var data = new Date(d);
@@ -155,8 +25,8 @@ function formatarData(d) {
   return dia + " de " + mes + " de " + ano;
 }
 
-function mostrarTarefas(email) {
-  var tasks = getTasks(email);
+function mostrarTarefas() {
+  var tasks = getTasks();
   taskList.innerHTML = "";
 
   if (tasks.length == 0) {
@@ -215,8 +85,7 @@ function adicionarTarefa() {
     return;
   }
 
-  var email = localStorage.getItem("todolist_session");
-  var tasks = getTasks(email);
+  var tasks = getTasks();
 
   var novaTarefa = {};
   novaTarefa.id = Date.now().toString();
@@ -227,9 +96,9 @@ function adicionarTarefa() {
 
   tasks.unshift(novaTarefa);
 
-  saveTasks(email, tasks);
+  saveTasks(tasks);
   taskInput.value = "";
-  mostrarTarefas(email);
+  mostrarTarefas();
 }
 
 addBtn.addEventListener("click", adicionarTarefa);
@@ -242,8 +111,7 @@ taskInput.addEventListener("keydown", function (e) {
 
 taskList.addEventListener("change", function (e) {
   if (e.target.type == "checkbox") {
-    var email = localStorage.getItem("todolist_session");
-    var tasks = getTasks(email);
+    var tasks = getTasks();
     var id = e.target.dataset.id;
 
     for (var i = 0; i < tasks.length; i++) {
@@ -257,15 +125,14 @@ taskList.addEventListener("change", function (e) {
       }
     }
 
-    saveTasks(email, tasks);
-    mostrarTarefas(email);
+    saveTasks(tasks);
+    mostrarTarefas();
   }
 });
 
 taskList.addEventListener("click", function (e) {
   if (e.target.className == "delete-btn") {
-    var email = localStorage.getItem("todolist_session");
-    var tasks = getTasks(email);
+    var tasks = getTasks();
     var id = e.target.dataset.id;
     var novaLista = [];
 
@@ -275,20 +142,11 @@ taskList.addEventListener("click", function (e) {
       }
     }
 
-    saveTasks(email, novaLista);
-    mostrarTarefas(email);
+    saveTasks(novaLista);
+    mostrarTarefas();
   }
 });
 
 window.addEventListener("DOMContentLoaded", function () {
-  var email = localStorage.getItem("todolist_session");
-  if (email) {
-    var users = getUsers();
-    var user = achaUsuarioPorEmail(users, email);
-    if (user) {
-      entrarNoApp(user.name, email);
-    } else {
-      entrarNoApp(email, email);
-    }
-  }
+  mostrarTarefas();
 });
