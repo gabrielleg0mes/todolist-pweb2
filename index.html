@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TodoList</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn">☰</button>
+    <h1>TodoList</h1>
+    <span class="topbar-spacer"></span>
+  </header>
+
+  <section id="auth-screen" class="screen">
+    <div class="auth-card">
+      <h2 id="auth-title">Entrar</h2>
+      <p class="auth-subtitle" id="auth-subtitle">Acesse sua conta para ver suas tarefas</p>
+
+      <form id="auth-form">
+        <div class="field" id="name-field" style="display:none">
+          <label for="name">Nome</label>
+          <input type="text" id="name" placeholder="Seu nome">
+        </div>
+
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" placeholder="seu@email.com" required>
+        </div>
+
+        <div class="field">
+          <label for="password">Senha</label>
+          <input type="password" id="password" placeholder="senha" required>
+        </div>
+
+        <p class="auth-error" id="auth-error"></p>
+
+        <button type="submit" class="btn-primary" id="auth-submit">Entrar</button>
+      </form>
+
+      <p class="auth-toggle">
+        <span id="toggle-text">Não tem conta?</span>
+        <button type="button" id="toggle-btn">Crie sua conta</button>
+      </p>
+    </div>
+  </section>
+
+  <section id="app-screen" class="screen" style="display:none">
+    <div class="app-card">
+      <div class="app-header">
+        <span class="brand">TodoList</span>
+        <span class="greeting">Bom dia, <strong id="user-name">Usuário</strong></span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="add-task">
+        <label for="task-input">Adicionar tarefas</label>
+        <div class="add-task-row">
+          <input type="text" id="task-input" placeholder="Nome da tarefa">
+          <button id="add-btn" class="btn-primary">Adicionar</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="tasks-header">
+        <div>
+          <h3>Minhas tarefas</h3>
+          <p>Veja todas as suas tarefas criadas na plataforma.</p>
+        </div>
+        <div class="progress" id="progress-count">0 de 0 <span>concluídas</span></div>
+      </div>
+
+      <ul id="task-list" class="task-list"></ul>
+
+      <div id="empty-state" class="empty-state" style="display:none">
+        <p>Nenhum registro encontrado!</p>
+      </div>
+    </div>
+
+    <button id="logout-btn" class="logout-btn">Sair</button>
+  </section>
+
+<script src="script.js"></script>
+</body>
+</html>
